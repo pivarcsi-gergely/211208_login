@@ -1,4 +1,6 @@
 <?php
+require __DIR__ . '/../vendor/autoload.php';
+
 use Slim\Factory\AppFactory;
 use Illuminate\Database\Capsule\Manager as Capsule;
 
@@ -9,8 +11,8 @@ $capsule->addConnection([
     'host' => 'localhost',
     'database' => 'loginapp',
     'username' => 'root',
-    'password' => 'password',
-    'charset' => 'utf8',
+    'password' => '',
+    'charset' => 'utf8mb4',
     'collation' => 'utf8mb4_unicode_ci',
     'prefix' => '',
 ]);
@@ -21,9 +23,8 @@ $capsule->setAsGlobal();
 $capsule->bootEloquent();
 
 
-require __DIR__ . '/../vendor/autoload.php';
-
 $app = AppFactory::create();
+
 $routes = require '../src/routes.php';
 $routes($app);
 
