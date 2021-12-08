@@ -1,4 +1,4 @@
-/register
+## /register
 
     Bemenet:
     {
@@ -7,7 +7,7 @@
     }
     Ki: HTTP Created, user objektum
     
-/login
+## /login
 
     Be:
     {
