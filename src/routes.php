@@ -1,4 +1,5 @@
 <?php
+
 use Petrik\Loginapp\Middlewares\AuthMiddleware;
 use Petrik\Loginapp\User;
 use Petrik\Loginapp\Token;
@@ -6,12 +7,12 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Routing\RouteCollectorProxy;
 
-return function(Slim\App $app) {
+return function (Slim\App $app) {
     $app->get('/', function (Request $request, Response $response, $args) {
         $response->getBody()->write("Hello world!");
         return $response;
     });
-    $app->post('/register', function(Request $request, Response $response) {
+    $app->post('/register', function (Request $request, Response $response) {
         $userData = json_decode($request->getBody(), true);
         $user = new User();
         $user->email = $userData['email'];
@@ -28,9 +29,11 @@ return function(Slim\App $app) {
         $password = $loginData['password'];
         $user = User::where('email', $email)->firstOrFail();
         if (!password_verify($password, $user->password)) {
-            throw new Exception("Hibas email v. jelszo");
-        }
-        else {
+            $response->getBody()->write(json_encode([
+                'Hibauzenet' => 'Hibas email vagy jelszo!'
+            ]));
+            return $response->withHeader('Content-Type', 'application/json')->withStatus(403);
+        } else {
             $token = new Token();
             $token->user_id = $user->id;
             $token->token = bin2hex(random_bytes(16));
@@ -51,5 +54,5 @@ return function(Slim\App $app) {
             ]));
             return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
         });
-    })->add(new AuthMiddleware);
+    })->add(new AuthMiddleware($app->getResponseFactory()));
 };
