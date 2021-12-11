@@ -25,8 +25,12 @@ class AuthMiddleware
                 $token = Token::where('token', $tokenStr)->firstOrFail();
             }
         }
+
         $user = User::where('id', $token->user_id)->firstOrFail();
         //User kikeresése, eltárolása
+        if ($user->admin == 0) {
+            throw new Exception("The user is not an admin!");
+        }
 
         return $handler->handle($request);
     }
