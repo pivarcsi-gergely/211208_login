@@ -47,7 +47,8 @@ CREATE TABLE `users` (
   `email` varchar(70) COLLATE utf8_hungarian_ci NOT NULL,
   `password` varchar(1000) COLLATE utf8_hungarian_ci NOT NULL,
   `created_at` datetime NOT NULL,
-  `updated_at` datetime NOT NULL
+  `updated_at` datetime NOT NULL,
+  `admin` boolean NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
 
 --
